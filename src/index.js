@@ -1,7 +1,7 @@
 import {
   map, get, flow, set, filter, over, fromPairs, assignWith, union, includes, keys, reject, first,
   partial, cond, matchesProperty, constant, some, castArray, isEmpty, equals, sortBy, identity,
-  mapValues, flatMap, groupBy, overSome, toPairs, update, reduce, concat,
+  mapValues, flatMap, groupBy, overSome, toPairs, update, reduce, concat, curry,
 } from 'lodash/fp';
 import resolve from 'resolve';
 import minimatch from 'minimatch';
@@ -10,6 +10,8 @@ import { readFile } from 'fs';
 import promisify from 'tiny-promisify';
 
 const readFilePromise = promisify(readFile);
+
+const match = curry((file, matcher) => minimatch(file, matcher, { matchBase: true }));
 
 export const defaultParser = 'espree';
 export const defaultParserOptions = {
@@ -129,7 +131,7 @@ export default async function getDependencies({
   const fileIsExcluded = isEmpty(excludeValues)
     ? constant(false)
     : file => some(cond([
-      [includes('*'), partial(minimatch, [file])],
+      [includes('*'), partial(match, [file])],
       [constant(true), equals(file)],
     ]), excludeValues);
 
