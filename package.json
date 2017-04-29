@@ -4,7 +4,7 @@
   "description": "Recursively get imports and exports for files using ES import/export syntax",
   "main": "index.js",
   "scripts": {
-    "test": "ava --verbose --timeout 2s",
+    "test": "ava --verbose --timeout 3s",
     "build": "babel src/index.js -o index.js"
   },
   "keywords": [
