@@ -23,6 +23,7 @@ const exportFrom = join(baseDir, 'export-from');
 const exportFromNamespace = join(baseDir, 'export-from-namespace');
 const nestedFiles = join(baseDir, 'nested-files');
 const babelFile = join(baseDir, 'babel-file');
+const scssFile = join(baseDir, 'scss-imports');
 const nodeModules = join(__dirname, '../node_modules');
 
 test('a single parses and loads recirsively via a single entry point', t => {
@@ -267,6 +268,17 @@ test('a file that requires babel parses with babel-eslint', t => {
 
   return getEsImports({
     files: [join(babelFile, 'index.js')],
+    parser: 'babel-eslint',
+  }).then(() => {
+    t.pass();
+  });
+});
+
+test('a file that imports scss can exclude correctly', t => {
+  t.plan(1);
+  return getEsImports({
+    files: [join(scssFile, 'index.js')],
+    exclude: ['*.scss'],
     parser: 'babel-eslint',
   }).then(() => {
     t.pass();
